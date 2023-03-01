@@ -43,6 +43,7 @@ export const createNews = async (req, res) => {
             newsImage: result.secure_url,
             newsTitle: req.body.newsTitle,
             newsContent:req.body.newsContent,
+            category:req.body.category,
           })
   
           const saveNews = await  newNews.save();
@@ -58,10 +59,20 @@ export const createNews = async (req, res) => {
   }
 
   // =====================get All news======================
+
   export const findAll = async (req, res) => {
-    try{
-    const news = await News.find();
-      
+    const catName = req.query.cat;
+    try {
+      let news;
+       if (catName) {
+        news = await News.find({
+          category: {
+            $in: [catName],
+          },
+        });
+      } else {
+        news = await News.find();
+      }
       return res.status(200).json({
         data: news
       });
@@ -69,6 +80,17 @@ export const createNews = async (req, res) => {
       return res.status(500).json(err);
     }
   };
+  // export const findAll = async (req, res) => {
+  //   try{
+  //   const news = await News.find();
+      
+  //     return res.status(200).json({
+  //       data: news
+  //     });
+  //   } catch (err) {
+  //     return res.status(500).json(err);
+  //   }
+  // };
 
   // =====================get One news================================
   export const getOne = async (req, res) => {

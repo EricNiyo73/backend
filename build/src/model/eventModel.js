@@ -11,9 +11,11 @@ const eventSchema = new _mongoose.default.Schema({
     type: String,
     rquired: true
   },
-  eventMedia: {
-    type: String,
-    require: true
+  eventContent: {
+    type: String
+  },
+  eventImage: {
+    type: String
   },
   date: {
     type: Date,

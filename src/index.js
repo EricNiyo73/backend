@@ -6,6 +6,8 @@ import cors from "cors";
 import userRoutes from './Route/userRoute.js';
 import newsRoute from './Route/newsRoute.js';
 import eventRoute from './Route/eventRoute.js';
+import roomAdmin from './Route/roomAdminRoute.js';
+import roomUser from './Route/roomUseRoute.js'
 dotenv.config();
 const {PORT} = process.env;
 const app = express();
@@ -32,6 +34,8 @@ app.listen(PORT,() =>{
 app.use('/user',userRoutes);
 app.use('/news',newsRoute);
 app.use('/events',eventRoute);
+app.use('/adminRoom',roomAdmin);
+app.use('/userRoom',roomUser);
 
 app.get('/', (req, res) => {
     return res.json({message: "Welcome  I am testing again"});

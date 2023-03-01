@@ -28,7 +28,7 @@ const userSchema = new _mongoose.default.Schema({
   },
   role: {
     type: String,
-    enum: ["user", "admin", "superAdmin"],
+    enum: ["user", "admin", "leader"],
     default: "user"
   },
   date: {

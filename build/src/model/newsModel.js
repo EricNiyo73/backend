@@ -14,9 +14,13 @@ const newsSchema = new _mongoose.default.Schema({
   },
   newsContent: {
     type: String,
-    required: true
+    required: false
   },
   newsImage: {
+    type: String,
+    required: false
+  },
+  category: {
     type: String,
     required: true
   },

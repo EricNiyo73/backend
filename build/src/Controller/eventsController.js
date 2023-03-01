@@ -3,17 +3,15 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.upload = exports.updateNews = exports.getOne = exports.findAll = exports.deleteNews = exports.default = exports.createNews = void 0;
+exports.upload = exports.updateEvent = exports.getOne = exports.findAll = exports.deleteEvent = exports.default = exports.createEvent = void 0;
 var _express = _interopRequireDefault(require("express"));
 var _bodyParser = _interopRequireDefault(require("body-parser"));
-var _newsModel = _interopRequireDefault(require("../model/newsModel.js"));
+var _eventModel = _interopRequireDefault(require("../model/eventModel.js"));
 var _multer = _interopRequireDefault(require("multer"));
 var _path = _interopRequireDefault(require("path"));
 var _dotenv = _interopRequireDefault(require("dotenv"));
 var _cloudinary = require("cloudinary");
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-// import router from "express".Router();
-
 const router = (0, _express.default)();
 _dotenv.default.config();
 const app = (0, _express.default)();
@@ -44,80 +42,57 @@ var upload = (0, _multer.default)({
     }
   }
 });
-// =============================Create a News=====================
+// =============================Create a Event=====================
 exports.upload = upload;
-const createNews = async (req, res) => {
+const createEvent = async (req, res) => {
   try {
     const result = await _cloudinary.v2.uploader.upload(req.file.path);
     // console.log(req.body,req.file);
-    const newNews = new _newsModel.default({
-      newsImage: result.secure_url,
-      newsTitle: req.body.newsTitle,
-      newsContent: req.body.newsContent,
-      category: req.body.category
+    const newevent = new _eventModel.default({
+      eventImage: result.secure_url,
+      eventTitle: req.body.eventTitle,
+      eventContent: req.body.eventContent
     });
-    const saveNews = await newNews.save();
+    const saveEvent = await newevent.save();
     return res.status(200).json({
-      saveNews,
-      status: "your news was successfully uploaded"
+      saveEvent,
+      status: "your Event was successfully uploaded"
     });
   } catch (error) {
     return res.status(500).json(error);
   }
 };
-
-// =====================get All news======================
-exports.createNews = createNews;
+//   ==========================get all events========================
+exports.createEvent = createEvent;
 const findAll = async (req, res) => {
-  const catName = req.query.cat;
   try {
-    let news;
-    if (catName) {
-      news = await _newsModel.default.find({
-        category: {
-          $in: [catName]
-        }
-      });
-    } else {
-      news = await _newsModel.default.find();
-    }
+    const events = await _eventModel.default.find();
     return res.status(200).json({
-      data: news
+      data: events
     });
   } catch (err) {
     return res.status(500).json(err);
   }
 };
-// export const findAll = async (req, res) => {
-//   try{
-//   const news = await News.find();
 
-//     return res.status(200).json({
-//       data: news
-//     });
-//   } catch (err) {
-//     return res.status(500).json(err);
-//   }
-// };
-
-// =====================get One news================================
+// =====================get One event================================
 exports.findAll = findAll;
 const getOne = async (req, res) => {
   try {
-    const news = await _newsModel.default.findById(req.params.id);
-    return res.status(200).json(news);
+    const events = await _eventModel.default.findById(req.params.id);
+    return res.status(200).json(events);
   } catch (err) {
     return res.status(500).json(err);
   }
 };
 // ======================Delete==============================
 exports.getOne = getOne;
-const deleteNews = async (req, res) => {
+const deleteEvent = async (req, res) => {
   try {
-    const news = await _newsModel.default.findById(req.params.id);
+    const events = await _eventModel.default.findById(req.params.id);
     try {
-      await news.delete();
-      return res.status(200).json("news has been deleted...");
+      await events.delete();
+      return res.status(200).json("Event has been deleted...");
     } catch (err) {
       return res.status(500).json(err);
     }
@@ -127,21 +102,21 @@ const deleteNews = async (req, res) => {
 };
 
 // ===============Update=============================
-exports.deleteNews = deleteNews;
-const updateNews = async (req, res) => {
+exports.deleteEvent = deleteEvent;
+const updateEvent = async (req, res) => {
   try {
-    const updatedNews = await _newsModel.default.findByIdAndUpdate(req.params.id, {
+    const updatedEvent = await _eventModel.default.findByIdAndUpdate(req.params.id, {
       $set: req.body
     }, {
       new: true
     });
-    return res.status(200).json(updatedNews);
+    return res.status(200).json(updatedEvent);
   } catch (err) {
     res.status(500).json(err);
   }
   ;
 };
-exports.updateNews = updateNews;
+exports.updateEvent = updateEvent;
 var _default = router;
 exports.default = _default;
-//# sourceMappingURL=newsController.js.map
+//# sourceMappingURL=eventsController.js.map

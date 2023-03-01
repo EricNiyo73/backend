@@ -15,6 +15,10 @@ const newsSchema = new mongoose.Schema({
         type: String,
         required: false,
     },
+    category: {
+        type: String,
+        required: true
+    },
     date: {
         type: Date,
         default: Date.now,
