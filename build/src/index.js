@@ -13,7 +13,7 @@ var _userRoute = _interopRequireDefault(require("./Route/userRoute.js"));
 var _newsRoute = _interopRequireDefault(require("./Route/newsRoute.js"));
 var _eventRoute = _interopRequireDefault(require("./Route/eventRoute.js"));
 var _roomAdminRoute = _interopRequireDefault(require("./Route/roomAdminRoute.js"));
-var _roomUseRoute = _interopRequireDefault(require("./Route/roomUseRoute.js"));
+var _bookUseRoute = _interopRequireDefault(require("./Route/bookUseRoute.js"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 _dotenv.default.config();
 const {
@@ -45,8 +45,8 @@ app.listen(PORT, () => {
 app.use('/user', _userRoute.default);
 app.use('/news', _newsRoute.default);
 app.use('/events', _eventRoute.default);
-app.use('/adminRoom', _roomAdminRoute.default);
-app.use('/userRoom', _roomUseRoute.default);
+app.use('/admin', _roomAdminRoute.default);
+app.use('/userbooking', bookUser);
 app.get('/', (req, res) => {
   return res.json({
     message: "Welcome  I am testing again"
