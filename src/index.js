@@ -6,7 +6,7 @@ import cors from "cors";
 import userRoutes from './Route/userRoute.js';
 import newsRoute from './Route/newsRoute.js';
 import eventRoute from './Route/eventRoute.js';
-import roomAdmin from './Route/AdminRoute.js';
+import admin from './Route/AdminRoute.js';
 import bookUser from './Route/bookUseRoute.js'
 dotenv.config();
 const {PORT} = process.env;
@@ -34,7 +34,7 @@ app.listen(PORT,() =>{
 app.use('/user',userRoutes);
 app.use('/news',newsRoute);
 app.use('/events',eventRoute);
-app.use('/admin',roomAdmin);
+app.use('/admin',admin);
 app.use('/userbooking',bookUser);
 
 app.get('/', (req, res) => {

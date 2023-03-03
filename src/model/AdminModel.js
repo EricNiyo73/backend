@@ -14,11 +14,11 @@ const bookAdminSchema = new mongoose.Schema({
     },
     desc: {
         type: String,
-        rewuired: true
+        required: true
     },
     image: {
         type: String,
-        rewuired: true
+        required: true
     }
     // bookNumbers: [{ number: Number, unavailableDates: {type: [Date]}}],
 })

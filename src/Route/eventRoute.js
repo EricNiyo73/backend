@@ -2,9 +2,9 @@ import express from "express";
 import {createEvent,upload,findAll,getOne,deleteEvent,updateEvent} from '../controller/eventsController.js';
 const router = express.Router();
 
-router.post('/createE',upload.single("eventImage"), createEvent);
-router.get('/getAll',findAll);
-router.get('/getOne/:id',getOne);
-router.delete('/delete/:id',deleteEvent);
-router.put('/update/:id',updateEvent);
+router.post('/create',upload.single("eventImage"), createEvent);
+router.get('/',findAll);
+router.get('/:id',getOne);
+router.delete('/:id',deleteEvent);
+router.put('/:id',updateEvent);
 export default router;

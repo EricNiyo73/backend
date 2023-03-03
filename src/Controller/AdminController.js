@@ -1,4 +1,5 @@
-import book from "../model/AdminModel.js";
+import facility from "../model/AdminModel.js";
+import BookingRequest from "../model/bookUserModel";
 import  Router  from 'express';
 const router = Router();
 import bodyParser from 'body-parser';
@@ -34,28 +35,35 @@ export var upload = multer({
 });
 // import { createError } from "../utils/error.js";
 
-// ==================creation of availability book===========
-export const createbook = async (req, res, next) => {
-  const newbook = new book(req.body);
+// ==================creation of availability facility===========
+export const createfacility = async (req, res, next) => {
+  const result = await cloudinary.uploader.upload(req.file.path);
+  const newfacility = new facility({
+    image: result.secure_url,
+    facilityTitle: req.body.facilityTitle,
+    subFacility:req.body.subFacility,
+    capacity: req.body.capacity,
+    desc:req.body.desc,
+  });
 
   try {
-    const savedbook = await newbook.save();
-    res.status(200).json(savedbook);
+    const savedfacility = await newfacility.save();
+    res.status(200).json(savedfacility);
   } catch (err) {
     next(err);
   }
 };
 
-// ==================update book==========================
+// ==================update facility==========================
 
-export const updatebook = async (req, res, next) => {
+export const updatefacility = async (req, res, next) => {
     try {
-      const updatedbook = await book.findByIdAndUpdate(
+      const updatedfacility = await facility.findByIdAndUpdate(
         req.params.id,
         { $set: req.body },
         { new: true }
       );
-      res.status(200).json(updatedbook);
+      res.status(200).json(updatedfacility);
     } catch (err) {
       next(err);
     }
@@ -63,17 +71,17 @@ export const updatebook = async (req, res, next) => {
 
 //   =======================update availability=========================
 
-// export const updatebookAvailability = async (req, res, next) => {
+// export const updatefacilityAvailability = async (req, res, next) => {
 //     try {
-//       await book.updateOne(
-//         { "bookNumbers._id": req.params.id },
+//       await facility.updateOne(
+//         { "facilityNumbers._id": req.params.id },
 //         {
 //           $push: {
-//             "bookNumbers.$.unavailableDates": req.body.dates
+//             "facilityNumbers.$.unavailableDates": req.body.dates
 //           },
 //         }
 //       );
-//       res.status(200).json("book status has been updated.");
+//       res.status(200).json("facility status has been updated.");
 //     } catch (err) {
 //       next(err);
 //     }
@@ -81,20 +89,58 @@ export const updatebook = async (req, res, next) => {
 
 //   ==============================delete availability==========================
 
-export const deletebook = async (req, res, next) => {
+export const deletefacility = async (req, res, next) => {
     try {
-      await book.findByIdAndDelete(req.params.id);
-      res.status(200).json("book has been deleted.");
+      await facility.findByIdAndDelete(req.params.id);
+      res.status(200).json("facility has been deleted.");
     } catch (err) {
       next(err);
     }
   };
-//   ==========================get books availability==========================
-export const getbooks = async (req, res, next) => {
+
+  // =======================get one facility=============================
+  export const getfacilit = async (req, res, next) => {
     try {
-      const books = await book.find();
-      res.status(200).json(books);
+      const getfacilit = await facility.findById(req.params.id);
+      res.status(200).json(getfacilit);
     } catch (err) {
       next(err);
     }
   };
+//   ==========================get facility availability==========================
+export const getfacility = async (req, res, next) => {
+    try {
+      const facilit = await facility.find();
+      res.status(200).json(facilit);
+    } catch (err) {
+      next(err);
+    }
+  };
+
+// 
+// =======================admin for approving a request=================
+
+// Endpoint for admins to approve or reject booking requests
+export const bookrequest= async (req, res) => {
+  try {
+    const bookingRequest = await BookingRequest.findById(req.params.id);
+    if (!bookingRequest) {
+      return res.status(404).json({ message: 'Booking request not found' });
+    }
+    if (req.body.status === 'Approved') {
+      bookingRequest.status = req.body.status;
+      await bookingRequest.save();
+      res.json({ message: 'Booking request approved successfully' });
+    } else if (req.body.status === 'Rejected'){
+      bookingRequest.status = req.body.status;
+      await bookingRequest.save();
+      res.json({ message: 'Booking request rejected successfully' });
+    }
+    else {
+      res.status(400).json({ message: 'Invalid booking request status' });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Failed to update booking request' });
+  }
+};

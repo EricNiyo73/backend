@@ -1,33 +1,47 @@
 import book from "../model/bookUserModel.js";
-
+import User from '../model/userModel.js'
 // ==================creation of availability book===========
 
 export const createbooking = async (req, res) => {
   try {
-    const { date, time } = req.body;
-
-    const availableBooking = await book.findOne({
-      'availability.date': date,
-      'availability.time': time,
-      'availability.isAvailable': true,
+    const user = await User.findById(req.params.userId);
+    if (!user){
+      return res.status(404).json({message: "User not found"});
+    }
+    const date = req.body.date; 
+    const time = req.body.time;
+    const existingBooking = await book.findOne({
+      availability: {
+        $elemMatch: {
+          date: { $eq: date },
+          time: { $eq: time }
+        }
+      }
+      // 'availability.isAvailable': true,
       // maxPeople: { $gte: capacity },
-    }).exec();
+    });
 
-    if (availableBooking) {
+    if (existingBooking) {
       return res.status(401).json("No available booking for the specified date and time");
     } 
-
+    else{
+    const bookingData = {
+      ...req.body,
+        firstname: user.firstname,
+        lastname: user.lastname
+      
+    };
     // create a new booking
-    const booking = new book(req.body);
+    const booking = new book(bookingData);
     // booking.roomUser = availableBooking._id;
 
     await booking.save();
 
     return res.status(200).json({
-      message: "success",
+      message: "Booking request submitted successfully",
       booking,
     });
-  } catch (err) {
+  }} catch (err) {
     console.error(err);
     return res.status(500).json("failed");
   }

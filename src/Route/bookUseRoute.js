@@ -9,7 +9,7 @@ import {
   updatebookAvailability,
 } from "../controller/bookUserController.js";
 //CREATE
-router.post("/createbook", createbooking);
+router.post("/createbook/:userId", createbooking);
 
 //UPDATE
 router.put("/:id", updatebook);

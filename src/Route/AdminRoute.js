@@ -1,24 +1,27 @@
 import express from "express";
 const router = express.Router();
 import {
-  createbook,
-  deletebook,
-  getbooks,
-  updatebook,
+  createfacility,
+  deletefacility,
+  getfacility,
+  getfacilit ,
+  updatefacility,
   upload,
+  bookrequest
 } from "../Controller/AdminController.js";
 
 
 //CREATE
-router.post("/createbook",upload.single("image"), createbook);
+router.post("/create",upload.single("image"), createfacility);
 
 //UPDATE
-// router.put("/availability/:id", updatebookAvailability);
-router.put("/:id", updatebook);
+router.put("/:id", updatefacility);
 //DELETE
-router.delete("/:id/:hotelid", deletebook);
+router.delete("/:id", deletefacility);
 //GET ALL
-
-router.get("/", getbooks);
+router.get("/:id", getfacilit);
+router.get("/", getfacility);
+// appove
+router.patch('/booking-requests/:id',bookrequest)
 
 export default router;

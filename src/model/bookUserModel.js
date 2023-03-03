@@ -1,6 +1,14 @@
 import mongoose from 'mongoose';
 const bookUserSchema = new mongoose.Schema(
     {
+      firstname: {
+        type: String,
+        required: true,
+      },
+     lastname: {
+        type: String,
+        required: true,
+      },
       facilities: [{
         facility: {
           type: String,
@@ -34,6 +42,11 @@ const bookUserSchema = new mongoose.Schema(
           default: true,
         },
       }],
+      status: {
+        type: String,
+        enum: ['Pending', 'Approved', 'Rejected'],
+        default: 'Pending'
+      },
     },
     { timestamps: true }
 
