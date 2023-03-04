@@ -10,10 +10,10 @@
     "build": "npm run clean && npm run build-babel",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "https://github.com/EricNiyo73",
   "license": "ISC",
   "keywords": [],
-  "description": "",
+  "description": "https://github.com/EricNiyo73",
   "dependencies": {
     "bcrypt": "^5.1.0",
     "body-parser": "^1.20.2",
