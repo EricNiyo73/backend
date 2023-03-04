@@ -9,10 +9,9 @@ var _bookUserController = require("../controller/bookUserController.js");
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 const router = _express.default.Router();
 //CREATE
-router.post("/createbook", _bookUserController.createbooking);
+router.post("/createbook/:userId", _bookUserController.createbooking);
 
 //UPDATE
-router.put("/availability/:id", _bookUserController.updatebookAvailability);
 router.put("/:id", _bookUserController.updatebook);
 //DELETE
 router.delete("/:id", _bookUserController.deletebook);
