@@ -8,11 +8,42 @@ var _userModel = _interopRequireDefault(require("../model/userModel.js"));
 var _bcrypt = _interopRequireDefault(require("bcrypt"));
 var _jsonwebtoken = _interopRequireDefault(require("jsonwebtoken"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
-function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return typeof key === "symbol" ? key : String(key); }
-function _toPrimitive(input, hint) { if (typeof input !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (typeof res !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+// export const createUser =async(req, res) =>{
+//     try {
+//       const salt = await bcrypt.genSalt(10);
+//       const hashedpassword = await bcrypt.hash(req.body.password, salt);
+//             const existingEmail = await User.findOne({ email: req.body.email });
+//       // Email validation using a regular expression
+//       const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+//       if (!emailRegex.test(req.body.email)) {
+//         return res.status(400).json({
+//           message: 'Invalid email format'
+//         });
+//     }
+//       if (existingEmail) {
+//         return res.status(409).json({
+//           message: 'Email  already exists'
+//         });
+//     }
+//       const user = new User({
+//           firstname: req.body.firstname, 
+//           lastname: req.body.lastname,  
+//           email: req.body.email, 
+//           password: hashedpassword
+//       })
+//       await user.save()
+//       return res.status(201).json({
+//         status: 'success',
+//         message: 'User created Successfully',
+//         data: user
+//       })
+//     } catch (error) {
+//       return res.status(404).json({
+//         status: 'error',
+//         error: error.message
+//       })
+//     }
+//   }
 const createUser = async (req, res) => {
   try {
     const salt = await _bcrypt.default.genSalt(10);
@@ -33,10 +64,12 @@ const createUser = async (req, res) => {
       });
     } else {
       // Create a user
-      const user1 = _objectSpread(_objectSpread({}, req.body), {}, {
+      const newUser = new _userModel.default({
+        firstname: req.body.firstname,
+        lastname: req.body.lastname,
+        email: req.body.email,
         password: hashedpassword
       });
-      const newUser = new _userModel.default(user1);
       newUser.save().then(result => {
         return res.status(200).json({
           status: 'success',

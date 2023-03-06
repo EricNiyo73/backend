@@ -12,49 +12,45 @@ function _interopRequireDefault(obj) {
     "default": obj
   };
 }
-function ownKeys(object, enumerableOnly) {
-  var keys = Object.keys(object);
-  if (Object.getOwnPropertySymbols) {
-    var symbols = Object.getOwnPropertySymbols(object);
-    if (enumerableOnly) symbols = symbols.filter(function (sym) {
-      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
-    });
-    keys.push.apply(keys, symbols);
-  }
-  return keys;
-}
-function _objectSpread(target) {
-  for (var i = 1; i < arguments.length; i++) {
-    var source = arguments[i] != null ? arguments[i] : {};
-    if (i % 2) {
-      ownKeys(source, true).forEach(function (key) {
-        _defineProperty(target, key, source[key]);
-      });
-    } else if (Object.getOwnPropertyDescriptors) {
-      Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
-    } else {
-      ownKeys(source).forEach(function (key) {
-        Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
-      });
-    }
-  }
-  return target;
-}
-function _defineProperty(obj, key, value) {
-  if (key in obj) {
-    Object.defineProperty(obj, key, {
-      value: value,
-      enumerable: true,
-      configurable: true,
-      writable: true
-    });
-  } else {
-    obj[key] = value;
-  }
-  return obj;
-}
+
+// export const createUser =async(req, res) =>{
+//     try {
+//       const salt = await bcrypt.genSalt(10);
+//       const hashedpassword = await bcrypt.hash(req.body.password, salt);
+//             const existingEmail = await User.findOne({ email: req.body.email });
+//       // Email validation using a regular expression
+//       const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+//       if (!emailRegex.test(req.body.email)) {
+//         return res.status(400).json({
+//           message: 'Invalid email format'
+//         });
+//     }
+//       if (existingEmail) {
+//         return res.status(409).json({
+//           message: 'Email  already exists'
+//         });
+//     }
+//       const user = new User({
+//           firstname: req.body.firstname, 
+//           lastname: req.body.lastname,  
+//           email: req.body.email, 
+//           password: hashedpassword
+//       })
+//       await user.save()
+//       return res.status(201).json({
+//         status: 'success',
+//         message: 'User created Successfully',
+//         data: user
+//       })
+//     } catch (error) {
+//       return res.status(404).json({
+//         status: 'error',
+//         error: error.message
+//       })
+//     }
+//   }
 var createUser = function createUser(req, res) {
-  var salt, hashedpassword, existingEmail, emailRegex, user1, newUser;
+  var salt, hashedpassword, existingEmail, emailRegex, newUser;
   return regeneratorRuntime.async(function createUser$(_context) {
     while (1) {
       switch (_context.prev = _context.next) {
@@ -93,10 +89,12 @@ var createUser = function createUser(req, res) {
           }));
         case 17:
           // Create a user
-          user1 = _objectSpread({}, req.body, {
+          newUser = new _userModel["default"]({
+            firstname: req.body.firstname,
+            lastname: req.body.lastname,
+            email: req.body.email,
             password: hashedpassword
           });
-          newUser = new _userModel["default"](user1);
           newUser.save().then(function (result) {
             return res.status(200).json({
               status: 'success',
@@ -109,26 +107,26 @@ var createUser = function createUser(req, res) {
               error: error
             });
           });
-        case 20:
-          _context.next = 27;
+        case 19:
+          _context.next = 26;
           break;
-        case 22:
-          _context.prev = 22;
+        case 21:
+          _context.prev = 21;
           _context.t0 = _context["catch"](0);
           if (!(_context.t0.code === 'Cannot set headers after they are sent to the client')) {
-            _context.next = 27;
+            _context.next = 26;
             break;
           }
           console.error(_context.t0);
           return _context.abrupt("return", res.status(500).json({
             message: 'Unexpected error'
           }));
-        case 27:
+        case 26:
         case "end":
           return _context.stop();
       }
     }
-  }, null, null, [[0, 22]]);
+  }, null, null, [[0, 21]]);
 }; // ===============================LOGIN==================================
 
 exports.createUser = createUser;
