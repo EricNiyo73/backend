@@ -1,24 +1,27 @@
 import  Router  from 'express';
-const router = Router();
 import bodyParser from 'body-parser';
 import eventModel from "../model/eventModel.js";
 import multer from "multer";
-import path from "path";
+const path = require("path");
 import express from "express";
 import dotenv from 'dotenv';
+import { v2 as cloudinary } from 'cloudinary';
+
 dotenv.config();
+const router = Router();
 const app = express();
+
 router.use("/images", express.static(path.join(process.cwd(), "/images")));
 router.use(bodyParser.urlencoded({ extended: true }))
 router.use(bodyParser.json());
 
 // ============Claudinary configuration=================
-import { v2 as cloudinary } from 'cloudinary';
 cloudinary.config({
   cloud_name:process.env.CLOUDNAME,
   api_key:process.env.API_KEY,
   api_secret:process.env.API_SECRET
 });
+
 export var upload = multer({
   storage: multer.diskStorage({}),
   fileFilter: (req, file, cb) => {
@@ -33,28 +36,31 @@ export var upload = multer({
     }
   },
 });
+
 // =============================Create a Event=====================
 export const createEvent = async (req, res) => {
   try {
+    if (!req.file) 
+    return res.send('Please upload a file');
+    console.log("Request: ", req);
+    console.log("Request File: ", req.file);
     const result = await cloudinary.uploader.upload(req.file.path);
-    // console.log(req.body,req.file);
-        const newevent = new eventModel({
-            eventImage: result.secure_url,
-            eventTitle: req.body.eventTitle,
-            eventContent:req.body.eventContent,
-          })
-  
-          const saveEvent = await  newevent.save();
-  
-         return res.status(200).json({
-            saveEvent,
-          status: "your Event was successfully uploaded"})   ;
-  
-      } catch (error) {
-        return  res.status(500).json(error)
-          
-      }
+    const newevent = new eventModel({
+      eventImage: result.secure_url,
+      eventTitle: req.body.eventTitle,
+      eventContent:req.body.eventContent,
+    })
+    const saveEvent = await newevent.save();
+    return res.status(200).json({
+      saveEvent,
+      status: "your Event was successfully uploaded"
+    });
+  } catch (error) {
+    console.log("Error: ", error);
+    return  res.status(500).json(error)
   }
+}
+
 //   ==========================get all events========================
   export const findAll = async (req, res) => {
     try{

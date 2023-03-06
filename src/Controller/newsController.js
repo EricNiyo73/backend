@@ -4,11 +4,12 @@ const router = Router();
 import bodyParser from 'body-parser';
 import News from "../model/newsModel.js";
 import multer from "multer";
-import path from "path";
+const path = require("path");
 import express from "express";
 import dotenv from 'dotenv';
 dotenv.config();
 const app = express();
+// console.log(path.join(process.cwd(), "/images"));
 router.use("/images", express.static(path.join(process.cwd(), "/images")));
 router.use(bodyParser.urlencoded({ extended: true }))
 router.use(bodyParser.json());
@@ -25,7 +26,7 @@ export var upload = multer({
   fileFilter: (req, file, cb) => {
     try {
       let ext = path.extname(file.originalname);
-      if (ext !== ".pdf" && ext !== ".JPG" && ext !== ".JPEG" && ext !== ".PNG" && ext !== ".jpg" && ext !== ".jpeg" && ext !== ".png"){
+      if (ext !== ".JPG" && ext !== ".JPEG" && ext !== ".PNG" && ext !== ".jpg" && ext !== ".jpeg" && ext !== ".png"){
         return cb(new Error("File type is not supported"), false);
       }
       cb(null, true);
@@ -37,10 +38,12 @@ export var upload = multer({
 // =============================Create a News=====================
 export const createNews = async (req, res) => {
   try {
+    if (!req.file) 
+    return res.send('Please upload a file');
     const result = await cloudinary.uploader.upload(req.file.path);
-    // console.log(req.body,req.file);
+    console.log("Request File: ", req.file);
         const newNews = new News({
-            newsImage: result.secure_url,
+          newsImage: result.secure_url,
             newsTitle: req.body.newsTitle,
             newsContent:req.body.newsContent,
             category:req.body.category,

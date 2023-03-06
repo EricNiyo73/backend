@@ -7,13 +7,13 @@ import userRoutes from './Route/userRoute.js';
 import newsRoute from './Route/newsRoute.js';
 import eventRoute from './Route/eventRoute.js';
 import admin from './Route/AdminRoute.js';
-import bookUser from './Route/bookUseRoute.js'
+import bookUser from './Route/bookUseRoute.js';
 dotenv.config();
 const {PORT} = process.env;
 const app = express();
 app.use(cors());
-app.use(express.json());
-app.use(bodyParser.urlencoded({ extended: true }))
+// app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json());
 mongoose.Promise = global.Promise;
 mongoose.set("strictQuery",true);

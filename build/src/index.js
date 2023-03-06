@@ -21,9 +21,9 @@ const {
 } = process.env;
 const app = (0, _express.default)();
 app.use((0, _cors.default)());
-app.use(_express.default.json());
+// app.use(express.json());
 app.use(_bodyParser.default.urlencoded({
-  extended: true
+  extended: false
 }));
 app.use(_bodyParser.default.json());
 _mongoose.default.Promise = global.Promise;

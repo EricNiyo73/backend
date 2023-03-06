@@ -8,42 +8,6 @@ var _userModel = _interopRequireDefault(require("../model/userModel.js"));
 var _bcrypt = _interopRequireDefault(require("bcrypt"));
 var _jsonwebtoken = _interopRequireDefault(require("jsonwebtoken"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-// export const createUser =async(req, res) =>{
-//     try {
-//       const salt = await bcrypt.genSalt(10);
-//       const hashedpassword = await bcrypt.hash(req.body.password, salt);
-//             const existingEmail = await User.findOne({ email: req.body.email });
-//       // Email validation using a regular expression
-//       const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-//       if (!emailRegex.test(req.body.email)) {
-//         return res.status(400).json({
-//           message: 'Invalid email format'
-//         });
-//     }
-//       if (existingEmail) {
-//         return res.status(409).json({
-//           message: 'Email  already exists'
-//         });
-//     }
-//       const user = new User({
-//           firstname: req.body.firstname, 
-//           lastname: req.body.lastname,  
-//           email: req.body.email, 
-//           password: hashedpassword
-//       })
-//       await user.save()
-//       return res.status(201).json({
-//         status: 'success',
-//         message: 'User created Successfully',
-//         data: user
-//       })
-//     } catch (error) {
-//       return res.status(404).json({
-//         status: 'error',
-//         error: error.message
-//       })
-//     }
-//   }
 const createUser = async (req, res) => {
   try {
     const salt = await _bcrypt.default.genSalt(10);

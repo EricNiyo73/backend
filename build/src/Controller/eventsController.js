@@ -12,8 +12,8 @@ var _path = _interopRequireDefault(require("path"));
 var _dotenv = _interopRequireDefault(require("dotenv"));
 var _cloudinary = require("cloudinary");
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-const router = (0, _express.default)();
 _dotenv.default.config();
+const router = (0, _express.default)();
 const app = (0, _express.default)();
 router.use("/images", _express.default.static(_path.default.join(process.cwd(), "/images")));
 router.use(_bodyParser.default.urlencoded({
@@ -22,7 +22,6 @@ router.use(_bodyParser.default.urlencoded({
 router.use(_bodyParser.default.json());
 
 // ============Claudinary configuration=================
-
 _cloudinary.v2.config({
   cloud_name: process.env.CLOUDNAME,
   api_key: process.env.API_KEY,
@@ -42,14 +41,16 @@ var upload = (0, _multer.default)({
     }
   }
 });
+
 // =============================Create a Event=====================
 exports.upload = upload;
 const createEvent = async (req, res) => {
   try {
-    const result = await _cloudinary.v2.uploader.upload(req.file.path);
-    // console.log(req.body,req.file);
+    console.log("Request: ", req);
+    console.log("Request File: ", req.file);
+    // const result = await cloudinary.uploader.upload(req.file.path);
     const newevent = new _eventModel.default({
-      eventImage: result.secure_url,
+      eventImage: "result.secure_url",
       eventTitle: req.body.eventTitle,
       eventContent: req.body.eventContent
     });
@@ -59,9 +60,11 @@ const createEvent = async (req, res) => {
       status: "your Event was successfully uploaded"
     });
   } catch (error) {
+    console.log("Error: ", error);
     return res.status(500).json(error);
   }
 };
+
 //   ==========================get all events========================
 exports.createEvent = createEvent;
 const findAll = async (req, res) => {

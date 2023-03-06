@@ -47,23 +47,27 @@ var upload = (0, _multer.default)({
 // =============================Create a News=====================
 exports.upload = upload;
 const createNews = async (req, res) => {
-  try {
-    const result = await _cloudinary.v2.uploader.upload(req.file.path);
-    // console.log(req.body,req.file);
-    const newNews = new _newsModel.default({
-      newsImage: result.secure_url,
-      newsTitle: req.body.newsTitle,
-      newsContent: req.body.newsContent,
-      category: req.body.category
-    });
-    const saveNews = await newNews.save();
-    return res.status(200).json({
-      saveNews,
-      status: "your news was successfully uploaded"
-    });
-  } catch (error) {
-    return res.status(500).json(error);
-  }
+  // try {
+  const result = await _cloudinary.v2.uploader.upload(req.file.path);
+  // console.log(req.body,req.file);
+  //  console.log("Request: ", req);
+  console.log("Request File: ", req.file);
+  const newNews = new _newsModel.default({
+    newsImage: result.secure_url,
+    newsTitle: req.body.newsTitle,
+    newsContent: req.body.newsContent,
+    category: req.body.category
+  });
+  const saveNews = await newNews.save();
+  return res.status(200).json({
+    saveNews,
+    status: "your news was successfully uploaded"
+  });
+
+  // } catch (error) {
+  //   return  res.status(500).json(error)
+
+  // }
 };
 
 // =====================get All news======================
