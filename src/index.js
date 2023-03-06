@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import bodyParser from 'body-parser';
 import cors from "cors";
-// import userRoutes from './Route/userRoute.js';
+import userRoutes from './Route/userRoute.js';
 import newsRoute from './Route/newsRoute.js';
 import eventRoute from './Route/eventRoute.js';
 import admin from './Route/AdminRoute.js';
@@ -31,7 +31,7 @@ app.listen(PORT,() =>{
 })
 
 // routes
-// app.use('/user',userRoutes);
+app.use('/user',userRoutes);
 app.use('/news',newsRoute);
 app.use('/events',eventRoute);
 app.use('/admin',admin);

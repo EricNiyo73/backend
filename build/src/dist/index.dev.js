@@ -9,6 +9,7 @@ var _mongoose = _interopRequireDefault(require("mongoose"));
 var _dotenv = _interopRequireDefault(require("dotenv"));
 var _bodyParser = _interopRequireDefault(require("body-parser"));
 var _cors = _interopRequireDefault(require("cors"));
+var _userRoute = _interopRequireDefault(require("./Route/userRoute.js"));
 var _newsRoute = _interopRequireDefault(require("./Route/newsRoute.js"));
 var _eventRoute = _interopRequireDefault(require("./Route/eventRoute.js"));
 var _AdminRoute = _interopRequireDefault(require("./Route/AdminRoute.js"));
@@ -18,8 +19,6 @@ function _interopRequireDefault(obj) {
     "default": obj
   };
 }
-
-// import userRoutes from './Route/userRoute.js';
 _dotenv["default"].config();
 var PORT = process.env.PORT;
 var app = (0, _express["default"])();
@@ -43,8 +42,8 @@ _mongoose["default"].connect(process.env.MONGO_URL, {
 app.listen(PORT, function () {
   console.log("server is listening on port ".concat(PORT, "..."));
 }); // routes
-// app.use('/user',userRoutes);
 
+app.use('/user', _userRoute["default"]);
 app.use('/news', _newsRoute["default"]);
 app.use('/events', _eventRoute["default"]);
 app.use('/admin', _AdminRoute["default"]);

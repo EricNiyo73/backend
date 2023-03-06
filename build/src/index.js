@@ -9,13 +9,12 @@ var _mongoose = _interopRequireDefault(require("mongoose"));
 var _dotenv = _interopRequireDefault(require("dotenv"));
 var _bodyParser = _interopRequireDefault(require("body-parser"));
 var _cors = _interopRequireDefault(require("cors"));
+var _userRoute = _interopRequireDefault(require("./Route/userRoute.js"));
 var _newsRoute = _interopRequireDefault(require("./Route/newsRoute.js"));
 var _eventRoute = _interopRequireDefault(require("./Route/eventRoute.js"));
 var _AdminRoute = _interopRequireDefault(require("./Route/AdminRoute.js"));
 var _bookUseRoute = _interopRequireDefault(require("./Route/bookUseRoute.js"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-// import userRoutes from './Route/userRoute.js';
-
 _dotenv.default.config();
 const {
   PORT
@@ -43,7 +42,7 @@ app.listen(PORT, () => {
 });
 
 // routes
-// app.use('/user',userRoutes);
+app.use('/user', _userRoute.default);
 app.use('/news', _newsRoute.default);
 app.use('/events', _eventRoute.default);
 app.use('/admin', _AdminRoute.default);
