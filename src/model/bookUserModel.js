@@ -9,7 +9,10 @@ const bookUserSchema = new mongoose.Schema(
         type: String,
         required: true,
       },
-      facilities: [{
+      email: {
+        type: String,
+        required: true,
+      },
         facility: {
           type: String,
           required: true,
@@ -17,8 +20,6 @@ const bookUserSchema = new mongoose.Schema(
         subFacility: {
           type: String
         },
-      }],
-
       maxPeople: {
         type: Number,
         required: true,
@@ -27,7 +28,7 @@ const bookUserSchema = new mongoose.Schema(
         type: String,
         required: true,
       },
-      availability: [{
+     
         date: {
           type: Date,
           required: true,
@@ -41,7 +42,6 @@ const bookUserSchema = new mongoose.Schema(
           type: Boolean,
           default: true,
         },
-      }],
       status: {
         type: String,
         enum: ['Pending', 'Approved', 'Rejected'],

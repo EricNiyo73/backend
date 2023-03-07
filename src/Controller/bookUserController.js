@@ -1,5 +1,6 @@
 import book from "../model/bookUserModel.js";
-import User from '../model/userModel.js'
+import User from '../model/userModel.js';
+import nodemailer from 'nodemailer';
 // ==================creation of availability book===========
 
 export const createbooking = async (req, res) => {
@@ -10,15 +11,20 @@ export const createbooking = async (req, res) => {
     }
     const date = req.body.date; 
     const time = req.body.time;
-    const existingBooking = await book.findOne({
-      availability: {
-        $elemMatch: {
-          date: { $eq: date },
-          time: { $eq: time }
-        }
-      }
-      // 'availability.isAvailable': true,
-      // maxPeople: { $gte: capacity },
+    // const existingBooking = await book.findOne({
+    //   availability: {
+    //     $elemMatch: {
+    //       date: { $eq: date },
+    //       time: { $eq: time }
+    //     }
+    //   }
+    //   // 'availability.isAvailable': true,
+    //   // maxPeople: { $gte: capacity },
+    // });
+    const existingBooking  = await book.findOne({ 
+      subFacility: req.body.subFacility,
+      date: req.body.date,
+      time: req.body.time,
     });
 
     if (existingBooking) {
@@ -28,7 +34,8 @@ export const createbooking = async (req, res) => {
     const bookingData = {
       ...req.body,
         firstname: user.firstname,
-        lastname: user.lastname
+        lastname: user.lastname,
+        email: user.email
       
     };
     // create a new booking

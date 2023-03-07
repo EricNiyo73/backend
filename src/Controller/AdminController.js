@@ -1,5 +1,6 @@
 import facility from "../model/AdminModel.js";
 import BookingRequest from "../model/bookUserModel";
+// import {sendBookingNotification} from "../confirmation/userNotify.js";
 import  Router  from 'express';
 const router = Router();
 import bodyParser from 'body-parser';
@@ -7,6 +8,7 @@ import multer from "multer";
 import path from "path";
 import express from "express";
 import dotenv from 'dotenv';
+import nodemailer from 'nodemailer';
 dotenv.config();
 const app = express();
 router.use("/images", express.static(path.join(process.cwd(), "/images")));
@@ -69,24 +71,6 @@ export const updatefacility = async (req, res, next) => {
     }
   };
 
-//   =======================update availability=========================
-
-// export const updatefacilityAvailability = async (req, res, next) => {
-//     try {
-//       await facility.updateOne(
-//         { "facilityNumbers._id": req.params.id },
-//         {
-//           $push: {
-//             "facilityNumbers.$.unavailableDates": req.body.dates
-//           },
-//         }
-//       );
-//       res.status(200).json("facility status has been updated.");
-//     } catch (err) {
-//       next(err);
-//     }
-//   };
-
 //   ==============================delete availability==========================
 
 export const deletefacility = async (req, res, next) => {
@@ -124,21 +108,62 @@ export const getfacility = async (req, res, next) => {
 export const bookrequest= async (req, res) => {
   try {
     const bookingRequest = await BookingRequest.findById(req.params.id);
+    let emailSubject;
+    let emailBody;
+    const transporter = nodemailer.createTransport({
+      host: 'smtp.gmail.com',
+      port: 587,
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
+      }
+    });
     if (!bookingRequest) {
       return res.status(404).json({ message: 'Booking request not found' });
     }
     if (req.body.status === 'Approved') {
       bookingRequest.status = req.body.status;
       await bookingRequest.save();
+      // ============message========================
+      emailSubject = 'Booking Confirmation';
+      emailBody = `<p>Dear ${bookingRequest.firstname},</p>
+                   <p>Your booking has been confirmed.</p>
+                   <p>Booking details:</p>
+                   <ul>
+                     <li>Facility: ${bookingRequest.subFacility}</li>
+                     <li>Date: ${bookingRequest.date}</li>
+                     <li>Time: ${bookingRequest.time}</li>
+                   </ul>`;
+        // ============================================
       res.json({ message: 'Booking request approved successfully' });
     } else if (req.body.status === 'Rejected'){
       bookingRequest.status = req.body.status;
       await bookingRequest.save();
+      // ===================mesage====================
+      emailSubject = 'Booking Rejection';
+      emailBody = `<p>Dear ${bookingRequest.firstname},</p>
+               <p>Your booking has been rejected.</p>
+               <p>Please contact us for more details.</p>`;
       res.json({ message: 'Booking request rejected successfully' });
     }
     else {
       res.status(400).json({ message: 'Invalid booking request status' });
     }
+
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: bookingRequest.email,
+      subject: emailSubject,
+      html: emailBody
+    };
+    
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.error(error);
+      } else {
+        console.log('Email sent: ' + info.response);
+      }
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Failed to update booking request' });
