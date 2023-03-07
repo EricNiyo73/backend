@@ -17,7 +17,7 @@ export const userRole= async (req, res) => {
         res.json({ message: 'still a normal user' });
       }
       else {
-        res.role(400).json({ message: 'Invalid  request role' });
+        res.status(400).json({ message: 'Invalid  request role' });
       }
     } catch (error) {
       console.error(error);
